@@ -1,0 +1,232 @@
+/* Menu bar (1.2.1 add-on): the 28 px row above the tabs, its dropdowns, the title, and the help dialogs. Colors are the
+   theme tokens. The frame is a column, so the top bar can be hidden (View > Toolbar) without leaving a gap. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.app > .app-body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.app > .menu-row,
+.app > .tab-strip,
+.app > .top-bar,
+.app > .status-bar {
+  flex: none;
+}
+
+.menu-row {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 28px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+  user-select: none;
+  -webkit-app-region: drag;
+  z-index: 40;
+}
+
+.menu-tops {
+  display: flex;
+  align-items: stretch;
+  -webkit-app-region: no-drag;
+}
+
+.menu-top {
+  position: relative;
+}
+
+.menu-button {
+  height: 100%;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.menu-button:hover,
+.menu-button-on {
+  background: var(--surface);
+}
+
+.menu-mn {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.menu-title {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 12px;
+  line-height: 28px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* The file name gives way first, cut in the middle (see .menu-title-name in toolbar.css); the bullet and "— PDF Suite"
+   always stay in view. */
+.menu-title-tail {
+  flex: none;
+}
+
+.menu-window-space {
+  flex: none;
+  width: 144px;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 60;
+  min-width: 240px;
+  padding: 4px 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.22);
+  -webkit-app-region: no-drag;
+}
+
+.menu-dropdown.menu-sub {
+  top: -5px;
+  left: 100%;
+}
+
+.menu-sub-wrap {
+  position: relative;
+}
+
+.menu-sep {
+  margin: 4px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 12px 5px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-item:hover:not(:disabled),
+.menu-item-on:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.menu-item:disabled {
+  color: var(--text-muted);
+  opacity: 0.55;
+  cursor: default;
+}
+
+.menu-check {
+  flex: none;
+  width: 14px;
+  text-align: center;
+}
+
+.menu-label {
+  flex: 1 1 auto;
+}
+
+.menu-accel {
+  flex: none;
+  margin-left: 24px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.menu-item:hover .menu-accel,
+.menu-item-on .menu-accel {
+  color: inherit;
+}
+
+/* Help dialogs: panels at the top right, not modals (the page is not dimmed) */
+.help-dialog {
+  position: fixed;
+  top: 68px;
+  right: 16px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  width: min(400px, calc(100vw - 32px));
+  max-height: calc(100vh - 100px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.3);
+  font-size: 13px;
+}
+
+.help-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.help-head h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.help-body:focus-visible {
+  outline: 2px solid var(--accent, #2563eb);
+  outline-offset: -2px;
+}
+
+.help-body {
+  padding: 12px;
+  overflow-y: auto;
+  line-height: 1.45;
+}
+
+.help-body p {
+  margin: 0 0 8px;
+}
+
+.help-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.help-table td {
+  padding: 3px 0;
+  vertical-align: top;
+}
+
+.help-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.help-table kbd {
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-2);
+  font-size: 11px;
+}

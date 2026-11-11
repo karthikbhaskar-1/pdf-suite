@@ -1,0 +1,95 @@
+# Release workflow (ADR-005). Unsigned path only. Triggered by a version tag such as v0.1.0.
+# The release is created as a DRAFT: the owner reads it, then publishes it by hand.
+# Every action is pinned by version tag for now. Before publishing, replace each tag with the full commit SHA
+# (keep the tag as a trailing comment).
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions: {}
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4.2.2 # TODO pin to full SHA before publishing
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4.4.0 # TODO pin to full SHA before publishing
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      # The test fixtures are generated, not committed. Corpus-based tests skip when the (non-redistributable) PDFs are absent.
+      - name: Generate test fixtures
+        run: npm run fixtures
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build installer, portable exe and portable zip (unsigned)
+        run: npm run desktop:build
+
+      # Placeholder for code signing (ADR-005 section 2). SignPath cannot open NSIS installers or asar archives,
+      # so signing happens in two stages. Add these when the SignPath project is approved:
+      #   Stage 1: build with `electron-builder --dir`, upload release/win-unpacked/PDF Suite.exe, submit a signing
+      #            request with signpath/github-action-submit-signing-request, copy the signed exe back, then run
+      #            `electron-builder --prepackaged release/win-unpacked --win nsis portable zip` (the zip then holds the signed exe).
+      #   Stage 2: submit a second signing request for the installer and the portable exe (the zip is built from the signed folder, so it needs no request).
+
+      - uses: actions/upload-artifact@v4.6.2 # TODO pin to full SHA before publishing
+        with:
+          name: pdf-suite-windows
+          if-no-files-found: error
+          path: |
+            release/PDF-Suite-Setup-*.exe
+            release/PDF-Suite-Portable-*.exe
+            release/PDF-Suite-Portable-*.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # Needed so docs/release/RELEASE-NOTES-0.1.0.md exists on the runner.
+      - uses: actions/checkout@v4.2.2 # TODO pin to full SHA before publishing
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4.3.0 # TODO pin to full SHA before publishing
+        with:
+          name: pdf-suite-windows
+          path: release
+
+      # The release body comes from the notes file that matches the tag: v0.1.0 uses RELEASE-NOTES-0.1.0.md.
+      - name: Find release notes for this tag
+        id: notes
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          path="docs/release/RELEASE-NOTES-${version}.md"
+          if [ ! -f "$path" ]; then
+            echo "Release notes file $path is missing for tag $TAG" >&2
+            exit 1
+          fi
+          echo "path=$path" >> "$GITHUB_OUTPUT"
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2.2.2 # TODO pin to full SHA before publishing
+        with:
+          draft: true
+          body_path: ${{ steps.notes.outputs.path }}
+          files: |
+            release/PDF-Suite-Setup-*.exe
+            release/PDF-Suite-Portable-*.exe
+            release/PDF-Suite-Portable-*.zip

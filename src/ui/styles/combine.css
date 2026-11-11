@@ -1,0 +1,353 @@
+/* The Combine window (1.3.3, UI spec section 1): 880 x 600, at least 720 x 480, centred over the app. */
+.combine-backdrop {
+  z-index: 90;
+}
+
+.combine-window {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(880px, calc(100vw - 32px));
+  height: min(600px, calc(100vh - 32px));
+  min-width: min(720px, 100vw);
+  min-height: min(480px, 100vh);
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.3);
+  font-size: 13px;
+}
+
+.combine-window button,
+.combine-window select,
+.combine-window input[type='text'] {
+  font: inherit;
+  color: inherit;
+}
+
+.combine-window button {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.combine-window button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.combine-window button.primary-button {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.combine-window button:focus-visible,
+.combine-window select:focus-visible,
+.combine-window input:focus-visible,
+.combine-list:focus-visible,
+.combine-pages:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.combine-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.combine-head h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.combine-window .combine-close {
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.combine-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.combine-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.combine-files,
+.combine-preview {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.combine-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.combine-empty {
+  display: grid;
+  place-items: center;
+}
+
+.combine-empty-text,
+.combine-preview-empty {
+  margin: 0;
+  padding: 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.combine-row {
+  display: grid;
+  grid-template-columns: 18px 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: default;
+}
+
+.combine-row.is-selected {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.combine-row.is-focused {
+  border-color: var(--accent);
+}
+
+.combine-handle {
+  cursor: grab;
+  color: var(--text-muted);
+  text-align: center;
+  user-select: none;
+}
+
+.combine-row-thumb {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 56px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.combine-thumb-canvas {
+  max-width: 46px;
+  max-height: 54px;
+  width: auto;
+  height: auto;
+}
+
+.combine-thumb-grey,
+.combine-page-grey {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--border);
+}
+
+.combine-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.combine-row-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.combine-row-detail {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.combine-row-range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.combine-row-range input {
+  width: 140px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+}
+
+.combine-warn {
+  color: var(--warn);
+}
+
+.combine-drop-line {
+  height: 2px;
+  margin: 0 4px;
+  background: var(--accent);
+}
+
+.combine-preview-title {
+  margin: 0;
+  padding: 8px 10px 4px;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combine-pages {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+  align-content: start;
+  padding: 8px 10px;
+  overflow-y: auto;
+}
+
+.combine-window .combine-page {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 112px;
+  padding: 2px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.combine-window .combine-page.is-left-out {
+  opacity: 0.35;
+  border-style: dashed;
+}
+
+.combine-page-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.combine-page-number {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 11px;
+}
+
+.combine-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.combine-notes p {
+  margin: 0;
+}
+
+.combine-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--surface-2);
+}
+
+.combine-window .combine-dismiss {
+  padding: 0 6px;
+  border: none;
+  background: transparent;
+}
+
+.combine-notices {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+}
+
+.combine-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+}
+
+.combine-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.combine-options select {
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+}
+
+.combine-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.combine-summary {
+  flex: 1 1 auto;
+}
+
+.combine-foot-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.combine-error {
+  color: var(--danger);
+}
+
+/* Spoken only: "Report.pdf moved to 2 of 3". */
+.combine-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

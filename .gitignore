@@ -1,0 +1,22 @@
+node_modules
+/dist
+/electron-dist
+/release
+*.tsbuildinfo
+.DS_Store
+tests/trial/tmp/
+tests/perf/out/
+# Local-only repository for parallel work (2026-11-10). Never pushed: publishing uses a fresh, scrubbed export (ADR-005).
+tests/trial/corpus/
+tests/trial/out/
+tests/trial/results/
+tests/fixtures/out/
+tests/signoff*/out/
+tests/signoff*/*.png
+tests/engine/corpus/
+tests/**/out/
+parity/
+trace-*.json
+memory-loop.json
+/build/icons/
+/.publish-patterns.local.json

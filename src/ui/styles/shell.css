@@ -1,0 +1,468 @@
+/* App frame: tab strip 36px, top bar 40px, workspace, status bar 24px. */
+.app-root {
+  height: 100vh;
+}
+
+/* One column that can never be wider than the window. Without it the column is sized by its
+   content, and a split view's wide page sheet pushes the second pane off-screen. */
+.app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 36px 40px minmax(0, 1fr) 24px;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Tabs */
+.tab-strip {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 0 6px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 220px;
+  margin-top: 4px;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+}
+
+.tab-active {
+  background: var(--surface);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.tab-title {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 180px;
+  padding: 6px 4px 6px 12px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* A long name is cut in the middle (1.5.5 D6): the start gives way with an ellipsis, the last 12 characters stay. */
+.tab-title-head {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-title-end {
+  flex: none;
+}
+
+/* A tooltip with a second line (1.5.5 D5: "Acts on the 3 selected pages.") keeps its line break. */
+div.tooltip,
+div.tooltip.tooltip-above {
+  white-space: pre;
+}
+
+.tab-close {
+  border: 0;
+  background: none;
+  padding: 2px 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.tab-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--border);
+}
+
+.tab-progress > div {
+  height: 100%;
+  background: var(--accent);
+}
+
+/* Top bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tb-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tb-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+
+.tb-button,
+.tb-menu summary {
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+  list-style: none;
+}
+
+.tb-button:hover:not(:disabled),
+.tb-menu summary:hover {
+  background: var(--surface-2);
+}
+
+.tb-page-box {
+  width: 52px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.tb-muted {
+  color: var(--text-muted);
+}
+
+.tb-menu {
+  position: relative;
+}
+
+.tb-menu-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+}
+
+.tb-menu-item {
+  padding: 6px 8px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tb-menu-item:hover {
+  background: var(--surface-2);
+}
+
+/* Workspace: rail, docks, main */
+.workspace {
+  display: flex;
+  min-height: 0;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 44px;
+  padding: 6px 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.rail-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.rail-button[aria-pressed="true"] {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.rail-more {
+  position: relative;
+}
+
+.rail-more-list {
+  position: absolute;
+  left: 40px;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.dock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.dock-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dock-title {
+  flex: 1;
+  font-weight: 600;
+}
+
+.dock-button {
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.dock-body {
+  flex: 1;
+  overflow: auto;
+  padding: 8px;
+}
+
+.panel-placeholder {
+  color: var(--text-muted);
+}
+
+.dock-resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+}
+
+.dock-resizer-left {
+  right: -3px;
+}
+
+.dock-resizer-right {
+  left: -3px;
+}
+
+.main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Messages and empty state */
+.tab-message {
+  margin: auto;
+  padding: 24px;
+  text-align: center;
+  color: var(--text);
+}
+
+.form-error,
+.tab-message[role="alert"] {
+  color: var(--danger);
+}
+
+.load-bar {
+  width: 240px;
+  height: 6px;
+  margin: 10px auto 0;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.load-bar > div {
+  height: 100%;
+  background: var(--accent);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 24px;
+  padding: 40px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  flex: 1;
+}
+
+.empty-over {
+  border-color: var(--accent);
+}
+
+.empty-title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.primary-button {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+.link-button {
+  border: 0;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.recent h2 {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+
+.recent ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Status bar */
+.status-bar {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Modal and toasts */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.35);
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 20px;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.3);
+}
+
+.modal h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.modal p {
+  margin: 0;
+}
+
+.modal input {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-2);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal-actions button {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.modal-actions .primary-button {
+  border-color: transparent;
+}
+
+.toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 36px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+/* The toast's text colour is always readable on its background, so the focus ring follows it. */
+.toast :focus-visible,
+.toast:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.toasts-left {
+  right: auto;
+  left: 16px;
+}
+
+.toast {
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+}

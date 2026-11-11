@@ -1,0 +1,386 @@
+/* Toolbar and status bar polish (ticket 1.2.2). This file comes after shell.css and menubar.css, so it wins over the
+   older top bar rules there (those still style the thumbnails panel's buttons and menus). The spacing here is part of the
+   width sums in ui/shell/TopBar.tsx (ITEM_GAP_PX, DIVIDER_PX, OVERFLOW_PX, LABEL_EXTRA_PX): change them together. */
+
+/* Top bar: 40 px tall, never wraps. Items that do not fit are taken out of the flow (tb-collapsed) and live in the "…" menu. */
+.app > .top-bar,
+.top-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 40px;
+  padding: 0 8px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.top-bar .tb-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.top-bar .tb-divider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  margin: 0 6px;
+  background: var(--border);
+}
+
+.tb-slot {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+/* A collapsed item stays in the page (so it can be measured and keeps its state) but takes no room and cannot be reached. */
+.tb-collapsed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tb-overflow {
+  display: flex;
+  margin-left: auto;
+  padding-left: 6px;
+}
+
+.tb-tip {
+  display: inline-flex;
+}
+
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tb-btn:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.tb-btn[aria-pressed="true"],
+.tb-btn[aria-expanded="true"] {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
+.tb-btn:disabled {
+  pointer-events: none;
+}
+
+.tb-btn-labeled {
+  width: auto;
+  padding: 0 8px;
+}
+
+.tb-btn.tb-has-chevron {
+  width: auto;
+  padding: 0 6px;
+  gap: 2px;
+}
+
+.tb-label {
+  margin-left: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.tb-menu-button .tb-label {
+  margin-left: 6px;
+}
+
+/* The label stays in the page while it is not shown, so the bar can measure it. */
+.tb-label-off {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Split button: the main command and a narrow caret that opens the other choices */
+.top-bar .tb-split {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.tb-btn.tb-split-main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.tb-btn.tb-split-caret {
+  width: 16px;
+  padding: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.tb-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Page navigation */
+.tb-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.top-bar .tb-page-box {
+  width: 44px;
+  height: 26px;
+  padding: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.tb-of {
+  min-width: 36px;
+  padding: 0 4px;
+  font-size: 12px;
+}
+
+/* Menus opened from the top bar and the status bar. They use the menu bar's look (menubar.css). */
+.tb-popup {
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.tb-popup.tb-popup-end {
+  left: auto;
+  right: 0;
+}
+
+.tb-popup.tb-popup-up {
+  top: auto;
+  bottom: 100%;
+}
+
+.menu-heading {
+  padding: 6px 12px 2px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.menu-subheading {
+  padding-left: 20px;
+  font-weight: 500;
+}
+
+.menu-note {
+  padding: 5px 12px;
+  color: var(--text-muted);
+}
+
+.menu-item:focus-visible:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-text);
+  outline: none;
+}
+
+/* Tooltip: one for the whole app, 500 ms after the pointer rests or the keyboard focuses */
+.tooltip {
+  position: fixed;
+  z-index: 300;
+  max-width: 320px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #1d2026;
+  color: #f4f5f7;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.tooltip.tooltip-above {
+  transform: translate(-50%, -100%);
+}
+
+/* Status bar: 24 px. Left, the page and the document info; right, the zoom controls. */
+.status-bar {
+  justify-content: space-between;
+  gap: 12px;
+  height: 24px;
+  padding: 0 8px 0 12px;
+  white-space: nowrap;
+}
+
+.status-left {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.status-page {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-input {
+  height: 18px;
+  padding: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  text-align: center;
+}
+
+.status-page-box {
+  width: 40px;
+}
+
+/* The selection chip (1.5.5 A5): never hidden, never cut. */
+.status-chip {
+  flex: none;
+  height: 18px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.status-chip:hover {
+  background: var(--hover, var(--surface));
+}
+
+/* The find bar under 640 px of its own width (1.5.5 A4): the box may shrink to 96 px, and nothing wraps. */
+.search-bar.search-narrow {
+  flex-wrap: nowrap;
+}
+
+.search-bar.search-narrow .search-input {
+  width: 96px;
+  min-width: 0;
+  flex: 0 1 96px;
+}
+
+/* The document info gives way first: it is cut with an ellipsis while the rest keeps its size. */
+.status-info {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-zoom {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+}
+
+.status-fit {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.status-bar .tb-btn {
+  width: 24px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.status-zoom-box {
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-zoom-input {
+  width: 52px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.status-bar .tb-btn.status-presets {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border);
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.status-slider {
+  width: 80px;
+  margin: 0 0 0 6px;
+}
+
+/* Window title in the menu row: the file name is cut in the middle (its start and its end, with the extension, stay in
+   view); the unsaved dot and " — PDF Suite" never give way. The full name is in the tooltip. */
+.menu-title-name {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.menu-title-head {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu-title-end {
+  flex: none;
+}
+
+/* Keeps the space before the dash (a flex item otherwise loses its leading space). */
+.menu-title-tail {
+  white-space: pre;
+}
+
+/* Web: touch targets are 40 px under 600 px wide */
+@media (max-width: 600px) {
+  .top-bar .tb-btn {
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .status-bar .tb-btn {
+    min-width: 40px;
+    height: 24px;
+  }
+}
+
+/* A disabled zoom box or slider lets the pointer through to its wrapper, so the tooltip can say why it is off. */
+.status-input:disabled,
+.status-slider:disabled {
+  pointer-events: none;
+}

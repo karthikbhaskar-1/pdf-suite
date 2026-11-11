@@ -1,0 +1,579 @@
+/* Part B features: body wrapper, find bar, split view, menus, palette, floating windows, panels. */
+
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.app-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.workspace {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Find bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.search-input {
+  width: 240px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface-2);
+}
+
+.search-status {
+  min-width: 110px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.search-bar .tb-button[aria-pressed="true"] {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+/* Search highlights (page overlay) */
+.search-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.search-hit {
+  position: absolute;
+  background: rgb(255 214 0 / 0.35);
+  mix-blend-mode: multiply;
+}
+
+.search-hit-current {
+  background: rgb(255 140 0 / 0.6);
+  outline: 2px solid rgb(230 110 0 / 0.9);
+}
+
+/* Split view */
+.split {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.split-vertical {
+  flex-direction: row;
+}
+
+.split-horizontal {
+  flex-direction: column;
+}
+
+.pane-frame {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+
+.pane-frame.pane-active {
+  outline-color: var(--accent);
+}
+
+.pane-header {
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.pane-header select {
+  max-width: 100%;
+  padding: 2px 4px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.pane-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.split-divider {
+  position: relative;
+  flex: 0 0 6px;
+  background: var(--border);
+}
+
+/* The handle is the focusable separator. The sync button is a sibling, so it is not nested in it. */
+.split-handle {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.split-handle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.split-vertical > .split-divider > .split-handle {
+  cursor: col-resize;
+}
+
+.split-horizontal > .split-divider > .split-handle {
+  cursor: row-resize;
+}
+
+.split-sync {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.split-sync[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Context menu */
+.context-menu {
+  position: fixed;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+}
+
+.context-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.context-item:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.context-item:disabled {
+  cursor: default;
+}
+
+.context-shortcut {
+  color: var(--text-muted);
+}
+
+.context-sep {
+  width: 100%;
+  margin: 4px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.context-sub {
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tb-menu-color {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+/* Command palette */
+.palette-backdrop {
+  align-items: start;
+  padding-top: 12vh;
+}
+
+.palette {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, calc(100vw - 32px));
+  max-height: 60vh;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.3);
+  overflow: hidden;
+}
+
+.palette-input {
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  font-size: 15px;
+}
+
+.palette-input:focus-visible {
+  outline: none;
+}
+
+.palette-list {
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  overflow: auto;
+}
+
+.palette-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.palette-item.palette-active {
+  background: var(--surface-2);
+}
+
+.palette-item.palette-disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.palette-item kbd {
+  color: var(--text-muted);
+  font: 12px ui-monospace, Consolas, monospace;
+}
+
+.palette-empty {
+  padding: 10px;
+  color: var(--text-muted);
+}
+
+/* The status line stays in the page so a screen reader announces it, but takes no room while empty. */
+.palette-empty:empty {
+  padding: 0;
+}
+
+/* Floating windows */
+.floating {
+  position: fixed;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  min-height: 140px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+  overflow: hidden;
+}
+
+.floating:focus {
+  outline: none;
+}
+
+.floating:focus-within {
+  border-color: var(--accent);
+}
+
+.floating-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 4px 10px;
+  background: var(--surface-2);
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+.floating-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.floating-close {
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 6px;
+}
+
+.floating-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  overflow: hidden;
+}
+
+.floating-hint {
+  margin: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.floating-grip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 50%, var(--text-muted) 50%, var(--text-muted) 58%, transparent 58%, transparent 74%, var(--text-muted) 74%, var(--text-muted) 82%, transparent 82%);
+  opacity: 0.6;
+}
+
+.loupe-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  background: var(--viewer-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.loupe-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overview-frame {
+  position: relative;
+  width: 100%;
+  background: var(--page-bg);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+
+.overview-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.overview-rect {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px solid var(--accent);
+  background: rgb(37 99 235 / 0.12);
+  pointer-events: none;
+}
+
+/* Panels: thumbnails, bookmarks, properties */
+.thumb-list {
+  position: relative;
+  height: 100%;
+  overflow: auto;
+}
+
+.thumb-sheet {
+  position: relative;
+  width: 100%;
+}
+
+.thumb {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.thumb:hover {
+  background: var(--surface-2);
+}
+
+.thumb-selected {
+  background: var(--surface-2);
+}
+
+/* The current page is marked with the accent border, and only that. Thumbnails are never recolored. */
+.thumb-current {
+  border-color: var(--accent);
+}
+
+.thumb-image {
+  display: block;
+  width: 160px;
+  height: auto;
+  background: var(--page-bg);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+}
+
+.thumb-blank {
+  height: 200px;
+}
+
+.thumb-label {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.bookmark-tree {
+  font-size: 13px;
+}
+
+.bookmark-list,
+.bookmark-group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bookmark-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-radius: 4px;
+}
+
+.bookmark-row[aria-selected="true"] {
+  background: var(--surface-2);
+}
+
+.bookmark-toggle {
+  width: 16px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.bookmark-title {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 4px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookmark-title:disabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.props-note {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.props-section + .props-section {
+  margin-top: 12px;
+}
+
+.props-section h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.props-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 6px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--surface-2);
+  font-size: 12px;
+}
+
+.props-row dt {
+  color: var(--text-muted);
+}
+
+.props-row dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Phone-width guard: the floating windows never exceed the screen. */
+@media (max-width: 600px) {
+  .floating {
+    max-width: calc(100vw - 16px);
+  }
+
+  .search-input {
+    width: 140px;
+  }
+}
+
+/* The thumbnail list is one tab stop; its active row shows the focus ring while the list has focus. */
+.thumb-list:focus {
+  outline: none;
+}
+
+.thumb-list:focus-visible .thumb-active,
+.thumb-list[data-focused='true'] .thumb-active {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}

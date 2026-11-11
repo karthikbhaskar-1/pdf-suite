@@ -1,0 +1,88 @@
+/* Colors are tokens on :root. Dark values apply by system preference unless the user chose light,
+   and always when the user chose dark. */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eceef2;
+  --text: #1d2026;
+  --text-muted: #5f6672;
+  --border: #d5d9e0;
+  --accent: #2563eb;
+  --accent-text: #ffffff;
+  --danger: #b42318;
+  --warn: #b45309;
+  --viewer-bg: #d9dde4;
+  --page-bg: #ffffff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1d22;
+    --surface: #24272e;
+    --surface-2: #2c3039;
+    --text: #e6e8ec;
+    --text-muted: #9aa1ad;
+    --border: #3a3f4a;
+    --accent: #6ea8ff;
+    --accent-text: #0b1220;
+    --danger: #ff8a80;
+    --warn: #f0a04b;
+    --viewer-bg: #14161a;
+    --page-bg: #ffffff;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1b1d22;
+  --surface: #24272e;
+  --surface-2: #2c3039;
+  --text: #e6e8ec;
+  --text-muted: #9aa1ad;
+  --border: #3a3f4a;
+  --accent: #6ea8ff;
+  --accent-text: #0b1220;
+  --danger: #ff8a80;
+  --warn: #f0a04b;
+  --viewer-bg: #14161a;
+  --page-bg: #ffffff;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}

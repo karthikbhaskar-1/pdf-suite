@@ -1,0 +1,46 @@
+{
+  "name": "pdf-suite",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-or-later",
+  "description": "PDF Suite: a Windows PDF app with a web version",
+  "type": "module",
+  "main": "electron-dist/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "fixtures": "node tests/fixtures/make-fixtures.mjs",
+    "test:e2e": "node tests/fixtures/make-fixtures.mjs && node --test --test-concurrency=1 --test-timeout=600000 \"tests/e2e/**/*.e2e.mjs\"",
+    "desktop:dev": "node scripts/desktop-dev.mjs",
+    "desktop:build": "tsc -b && vite build && node scripts/build-electron.mjs && electron-builder --config electron-builder.config.cjs --win --x64",
+    "desktop:pack": "tsc -b && vite build && node scripts/build-electron.mjs && electron-builder --config electron-builder.config.cjs --win --x64 --dir"
+  },
+  "dependencies": {
+    "idb-keyval": "^6.2.1",
+    "mupdf": "1.28.6",
+    "pdfjs-dist": "^5.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "jsdom": "^25.0.1",
+    "pdfkit": "^0.15.2",
+    "playwright": "^1.65.0",
+    "png-to-ico": "^3.0.2",
+    "typescript": "~5.6.3",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  }
+}
